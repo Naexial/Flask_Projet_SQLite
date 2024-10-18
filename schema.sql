@@ -8,5 +8,5 @@ CREATE TABLE clients (
 );
 CREATE TABLE livres (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom TEXT NOT NULL,
+    nom TEXT NOT NULL
 );
