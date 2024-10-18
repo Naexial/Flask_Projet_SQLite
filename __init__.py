@@ -75,7 +75,7 @@ def consultation_livre():
     cursor.execute('SELECT * FROM livres;')
     data = cursor.fetchall()
     conn.close()
-    return render_template('read_data.html', data=data)
+    return render_template('read_data_livre.html', data=data)
 
 @app.route('/enregistrer_client', methods=['GET'])
 def formulaire_client():
