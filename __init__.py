@@ -113,6 +113,35 @@ def enregistrer_livre():
     conn.commit()
     conn.close()
     return redirect('/consultation_livre/')  # Rediriger vers la page d'accueil après l'enregistrement
+
+@app.route('/supprimer_livre', methods=['GET', 'POST'])
+def supprimer_livre():
+    message = ""
+    
+    if request.method == 'POST':
+        livre_id = request.form['id']
+        
+        # Connexion à la base de données
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        
+        # Vérifier si le livre existe
+        cursor.execute('SELECT * FROM livres WHERE id = ?', (livre_id,))
+        livre = cursor.fetchone()
+        
+        if livre:
+            # Si le livre existe, on le supprime
+            cursor.execute('DELETE FROM livres WHERE id = ?', (livre_id,))
+            conn.commit()
+            message = f"Le livre avec l'ID {livre_id} a été supprimé."
+        else:
+            message = f"Aucun livre trouvé avec l'ID {livre_id}."
+        
+        conn.close()
+    
+    # Rendre la page avec un message de succès ou d'erreur
+    return render_template('supprimer_livre.html', message=message)
+
                                                                                                                                        
 if __name__ == "__main__":
   app.run(debug=True) 
