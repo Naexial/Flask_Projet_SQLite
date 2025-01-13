@@ -98,8 +98,9 @@ def enregistrer_client():
 
 @app.route('/enregistrer_livre', methods=['GET'])
 def formulaire_livre():
-    return render_template('formulaire_livre.html')  # afficher le formulaire
+    return render_template('formulaire_livre.html')
 
+# Route pour enregistrer un livre
 @app.route('/enregistrer_livre', methods=['POST'])
 def enregistrer_livre():
     nom = request.form['nom']
@@ -108,12 +109,44 @@ def enregistrer_livre():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
-    # Exécution de la requête SQL pour insérer un nouveau client
-    cursor.execute('INSERT INTO livres (nom) VALUES (?)', (nom,))
+    # Exécution de la requête SQL pour insérer un nouveau livre
+    cursor.execute('INSERT INTO livres (nom, disponible) VALUES (?, ?)', (nom, 1))
     conn.commit()
     conn.close()
-    return redirect('/consultation_livre/')  # Rediriger vers la page d'accueil après l'enregistrement
+    return redirect('/consultation_livres')  # Redirection après l'enregistrement
 
+# Route pour consulter les livres disponibles
+@app.route('/consultation_livres', methods=['GET'])
+def consultation_livres():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    # Récupérer uniquement les livres disponibles
+    cursor.execute('SELECT id, nom, disponible FROM livres WHERE disponible = 1')
+    livres = cursor.fetchall()
+    conn.close()
+
+    return render_template('consultation_livres.html', livres=livres)
+
+# Route pour emprunter un livre
+@app.route('/emprunter_livre/<int:livre_id>', methods=['POST'])
+def emprunter_livre(livre_id):
+    utilisateur = request.form['utilisateur']
+    date_emprunt = request.form['date_emprunt']
+    date_retour = request.form['date_retour']
+
+    # Connexion à la base de données
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    # Marquer le livre comme non disponible et enregistrer l'emprunt
+    cursor.execute('UPDATE livres SET disponible = 0 WHERE id = ?', (livre_id,))
+    cursor.execute('INSERT INTO emprunts (livre_id, utilisateur, date_emprunt, date_retour) VALUES (?, ?, ?, ?)',
+                   (livre_id, utilisateur, date_emprunt, date_retour))
+    conn.commit()
+    conn.close()
+
+    return redirect('/consultation_livres')  # Redirection après l'emprunt
 @app.route('/supprimer_livre', methods=['GET', 'POST'])
 def supprimer_livre():
     message = ""
