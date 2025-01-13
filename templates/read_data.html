@@ -1,28 +1,17 @@
-<!DOCTYPE>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Clients</title>
-</head>
-<body>
-    <h1>Liste des Clients</h1>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Création</th>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Adresse</th>
-        </tr>
-        {% for row in data %}
-        <tr>
-            <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
-            <td>{{ row[2] }}</td>
-            <td>{{ row[3] }}</td>
-            <td>{{ row[4] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Fiche Client</h2>
+    {% if data %}
+    <ul class="list-group mt-4">
+        <li class="list-group-item"><strong>ID :</strong> {{ data[0] }}</li>
+        <li class="list-group-item"><strong>Nom :</strong> {{ data[1] }}</li>
+        <li class="list-group-item"><strong>Prénom :</strong> {{ data[2] }}</li>
+        <li class="list-group-item"><strong>Email :</strong> {{ data[3] }}</li>
+        <li class="list-group-item"><strong>Téléphone :</strong> {{ data[4] }}</li>
+    </ul>
+    {% else %}
+    <p class="text-danger mt-4">Aucun client trouvé avec cet ID ou ce nom.</p>
+    {% endif %}
+</div>
+{% endblock content %}
