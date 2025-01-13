@@ -99,7 +99,7 @@ def enregistrer_client():
     cursor.execute('INSERT INTO clients (created, nom, prenom, adresse) VALUES (?, ?, ?, ?)', (1002938, nom, prenom, "ICI"))
     conn.commit()
     conn.close()
-    return redirect('/liste_client.html/')  # Rediriger vers la page d'accueil après l'enregistrement
+    return redirect('/liste_client/')  # Rediriger vers la page d'accueil après l'enregistrement
 
 @app.route('/enregistrer_livre', methods=['GET'])
 def formulaire_livre():
