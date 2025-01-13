@@ -1,1 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Liste des Clients</h2>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client[0] }}</td>
+                <td>{{ client[1] }}</td>
+                <td>{{ client[2] }}</td>
+                <td>
+                    <a href="/fiche_client/{{ client[0] }}" class="btn btn-info btn-sm">Voir Fiche</a>
+                    <a href="/fiche_nom/{{ client[1] }}" class="btn btn-secondary btn-sm">Rechercher par Nom</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
 
