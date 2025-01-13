@@ -39,32 +39,37 @@ def authentification():
 
     return render_template('formulaire_authentification.html', error=False)
 
-@app.route('/fiche_client/<int:post_id>')
+@app.route('/liste_clients', methods=['GET'])
+def liste_clients():
+    # Connexion à la base de données
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    # Récupérer tous les clients
+    cursor.execute('SELECT id, nom, prenom FROM clients')
+    clients = cursor.fetchall()
+    conn.close()
+
+    # Rendre le template HTML avec la liste des clients
+    return render_template('liste_clients.html', clients=clients)
+
+# Route pour afficher la fiche d'un client (par ID)
+@app.route('/fiche_client/<int:post_id>', methods=['GET'])
 def Readfiche(post_id):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM clients WHERE id = ?', (post_id,))
-    data = cursor.fetchall()
+    data = cursor.fetchone()
     conn.close()
-    # Rendre le template HTML et transmettre les données
     return render_template('read_data.html', data=data)
 
-@app.route('/fiche_nom/<string:nom>')
+# Route pour afficher la fiche d'un client (par nom)
+@app.route('/fiche_nom/<string:nom>', methods=['GET'])
 def NomFiche(nom):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM clients WHERE nom = ?', (nom,))
-    data = cursor.fetchall()
-    conn.close()
-    # Rendre le template HTML et transmettre les données
-    return render_template('read_data.html', data=data)
-
-@app.route('/consultation/')
-def ReadBDD():
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients;')
-    data = cursor.fetchall()
+    data = cursor.fetchone()
     conn.close()
     return render_template('read_data.html', data=data)
 
