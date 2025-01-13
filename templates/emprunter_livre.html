@@ -1,1 +1,46 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container bottomForm">
+    <h2 class="text-center">Détails du Livre</h2>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Id :</strong> {{ livre.id }}</li>
+                <li class="list-group-item"><strong>Nom :</strong> {{ livre.nom }}</li>
+                <li class="list-group-item"><strong>Disponibilité :</strong> 
+                    {% if livre.disponible %}
+                        Disponible
+                    {% else %}
+                        Non disponible
+                    {% endif %}
+                </li>
+            </ul>
+
+            <!-- Formulaire pour emprunter le livre -->
+            {% if livre.disponible %}
+            <form method="POST" class="mt-3">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <label for="utilisateur">Nom de l'emprunteur :</label>
+                    {{ form.utilisateur(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="date_emprunt">Date d'emprunt :</label>
+                    {{ form.date_emprunt(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="date_retour">Date de retour prévue :</label>
+                    {{ form.date_retour(class="form-control") }}
+                </div>
+                <button type="submit" class="btn btn-primary">Emprunter</button>
+            </form>
+            {% else %}
+            <p class="text-danger mt-3">Ce livre n'est pas disponible actuellement.</p>
+            {% endif %}
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+{% endblock content %}
 
