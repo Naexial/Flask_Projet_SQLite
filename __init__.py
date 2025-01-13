@@ -128,6 +128,7 @@ def consultation_livres():
 
     return render_template('consultation_livres.html', livres=livres)
 
+
 # Route pour emprunter un livre
 @app.route('/emprunter_livre/<int:livre_id>', methods=['POST'])
 def emprunter_livre(livre_id):
